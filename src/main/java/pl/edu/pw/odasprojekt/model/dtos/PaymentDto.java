@@ -11,4 +11,5 @@ public class PaymentDto {
     private String title;
     private Date sentAt;
     private double amount;
+    private String recipientNumber;
 }
