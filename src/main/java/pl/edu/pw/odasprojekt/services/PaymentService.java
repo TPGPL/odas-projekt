@@ -18,6 +18,8 @@ public class PaymentService {
 
     public Iterable<Payment> getAllPaymentsForClient(String clientNumber)
     {
-        var user = userService
+        var user = userService;
+
+        return null;
     }
 }
