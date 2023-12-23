@@ -40,7 +40,7 @@ public class UserService {
 
         var hash = passwordEncoder.encode(calculatedSecret + user.getSecretSalt());
 
-        if (hash.equals(user.getSecretHash())) { // login success
+        if (hash.equals(user.getSecretHash())) {
             return ServiceResponse.<String>builder().success(true).data(jwtService.generateJwtForUser(dto.getClientNumber())).build();
         }
 
