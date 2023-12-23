@@ -10,22 +10,26 @@
     <div th:insert="~{layout/navigation-noauth :: header}"></div>
     <div class="content mt-2">
         <h1 class="mb-2">Zaloguj się...</h1>
+        <p class="alert alert-danger" th:if="${message != null}" th:text="${message}"></p>
         <form action="#" th:action="@{/auth/login}" method="post" th:object="${user}">
             <div>
                 <label class="form-label" for="clientNumber">Identyfikator klienta</label>
-                <input th:field="*{clientNumber}" pattern="[0-9]{13}" maxlength="13" placeholder="Identyfikator" type="text" class="form-control form-control-lg col-3" id="clientNumber" />
+                <input required th:field="*{clientNumber}" pattern="[0-9]{13}" maxlength="13" placeholder="Identyfikator" type="text" class="form-control form-control-lg col-3" id="clientNumber" />
             </div>
             <div class="mt-3">
                 <label class="form-label">Wprowadź wybrane znaki hasła</label>
                 <div class="flex-row row">
                     <div class="col-1">
-                        <input th:field="*{passwordFrags[0].value}" maxlength="1" th:placeholder="*{passwordFrags[0].index+1}" type="password" class="form-control p-2 text-center form-control-lg" />
+                        <input type="hidden" th:field="*{passwordFrags[0].index}" th:value="*{passwordFrags[0].index}" />
+                        <input required th:field="*{passwordFrags[0].value}" maxlength="1" th:placeholder="*{passwordFrags[0].index+1}" type="password" class="form-control p-2 text-center form-control-lg" />
                     </div>
                     <div class="col-1">
-                        <input th:field="*{passwordFrags[1].value}" maxlength="1" th:placeholder="*{passwordFrags[1].index+1}" type="password" class="form-control p-2 text-center form-control-lg" />
+                        <input type="hidden" th:field="*{passwordFrags[1].index}" th:value="*{passwordFrags[1].index}" />
+                        <input required th:field="*{passwordFrags[1].value}" maxlength="1" th:placeholder="*{passwordFrags[1].index+1}" type="password" class="form-control p-2 text-center form-control-lg" />
                     </div>
                     <div class="col-1">
-                        <input th:field="*{passwordFrags[2].value}" maxlength="1" th:placeholder="*{passwordFrags[2].index+1}" type="password" class="form-control p-2 text-center form-control-lg" />
+                        <input type="hidden" th:field="*{passwordFrags[2].index}" th:value="*{passwordFrags[2].index}" />
+                        <input required th:field="*{passwordFrags[2].value}" maxlength="1" th:placeholder="*{passwordFrags[2].index+1}" type="password" class="form-control p-2 text-center form-control-lg" />
                     </div>
                 </div>
             </div>
