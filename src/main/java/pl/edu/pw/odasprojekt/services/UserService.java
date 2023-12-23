@@ -36,7 +36,7 @@ public class UserService {
         }
 
         var user = getUserByClientNumber(dto.getClientNumber());
-        int calculatedSecret = authService.calculateLoginSecret(user.getId(), dto.getPasswordFrags());
+        long calculatedSecret = authService.calculateLoginSecret(user.getId(), dto.getPasswordFrags());
 
         var hash = passwordEncoder.encode(calculatedSecret + user.getSecretSalt());
 
