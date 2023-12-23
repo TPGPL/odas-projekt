@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface AuthRepository extends CrudRepository<UserAuth, Integer> {
     Optional<UserAuth> findByIndexAndUserId(int index, int id);
+    void deleteAllByUserId(int id);
 }
