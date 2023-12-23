@@ -38,9 +38,9 @@ public class UserService {
         var user = getUserByClientNumber(dto.getClientNumber());
         long calculatedSecret = authService.calculateLoginSecret(user.getId(), dto.getPasswordFrags());
 
-        var hash = passwordEncoder.encode(calculatedSecret + user.getSecretSalt());
-
-        if (hash.equals(user.getSecretHash())) {
+        String givenPassword = calculatedSecret + user.getSecretSalt();
+        
+        if (passwordEncoder.matches(givenPassword, user.getSecretHash())) {
             return ServiceResponse.<String>builder().success(true).data(jwtService.generateJwtForUser(dto.getClientNumber())).build();
         }
 
