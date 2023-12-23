@@ -1,13 +1,17 @@
 package pl.edu.pw.odasprojekt.model.dtos;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Random;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserLoginDto {
     private final static int MAX_PASSWORD_LENGTH = 16;
     private String clientNumber;
