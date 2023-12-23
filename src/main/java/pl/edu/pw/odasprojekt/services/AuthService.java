@@ -22,9 +22,10 @@ public class AuthService {
         HashMap<Integer, UserAuth> secrets = new HashMap<>();
 
         for (int id : indices) {
-            secrets.put(id, authRepository.findByIndexAndUserId(indices[0], userId).orElse(null));
+            secrets.put(id, authRepository.findByIndexAndUserId(id, userId).orElse(null));
         }
 
+        // TODO: Fix, doesn't always work
         return (secrets.get(indices[0]).getSecret() + passFrags[0].getValue()) * ((indices[1] * indices[2]) / ((indices[0] - indices[1]) * (indices[0] - indices[2])))
                 + (secrets.get(indices[1]).getSecret() + passFrags[1].getValue()) * ((indices[0] * indices[2]) / ((indices[1] - indices[0]) * (indices[1] - indices[2])))
                 + (secrets.get(indices[2]).getSecret() + passFrags[2].getValue()) * ((indices[0] * indices[1]) / ((indices[2] - indices[1]) * (indices[2] - indices[0])));
