@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,7 +29,9 @@ public class UserData {
     @JoinColumn(name = "balance_id", referencedColumnName = "id")
     private UserBalance balance;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserAuth> auth;
+    @Builder.Default
+    private List<UserAuth> auth = new ArrayList<>();
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL)
-    private List<Payment> payments;
+    @Builder.Default
+    private List<Payment> payments = new ArrayList<>();
 }
