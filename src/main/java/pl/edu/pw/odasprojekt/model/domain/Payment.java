@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "Payment")
 @Data
@@ -18,6 +20,7 @@ public class Payment {
     private int id;
     private String title;
     private double amount;
+    private Date sentAt;
     @ManyToOne
     @JoinColumn(name = "recipient_id", referencedColumnName = "id")
     private UserData recipient;
