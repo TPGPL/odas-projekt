@@ -39,12 +39,21 @@ public class UserService {
         long calculatedSecret = authService.calculateLoginSecret(user.getId(), dto.getPasswordFrags());
 
         String givenPassword = calculatedSecret + user.getSecretSalt();
-        
+
         if (passwordEncoder.matches(givenPassword, user.getSecretHash())) {
             return ServiceResponse.<String>builder().success(true).data(jwtService.generateJwtForUser(dto.getClientNumber())).build();
         }
 
         return ServiceResponse.<String>builder().success(false).build();
+    }
+
+    public void adjustBalance(String clientNumber, double amount) {
+        var user = getUserByClientNumber(clientNumber);
+        var currentBalance = user.getBalance().getBalance();
+
+        user.getBalance().setBalance(currentBalance + amount);
+
+        userRepository.save(user);
     }
 
     private boolean verifyPasswordFragments(PasswordFragmentDto[] passwordFrags) {
