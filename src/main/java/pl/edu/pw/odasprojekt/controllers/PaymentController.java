@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import pl.edu.pw.odasprojekt.model.dtos.PaymentDto;
 import pl.edu.pw.odasprojekt.services.PaymentService;
 
 @Controller
@@ -30,7 +31,9 @@ public class PaymentController {
     }
 
     @RequestMapping(path = "/new", method = RequestMethod.GET)
-    public String createPayment() {
+    public String createPayment(Model model) {
+        model.addAttribute("payment", new PaymentDto());
+
         return "payments/new";
     }
 

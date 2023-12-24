@@ -3,8 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>[nBank] Wykonaj przelew...</title>
+    <link th:href="@{/css/bootstrap.css}" type="text/css" rel="stylesheet"/>
 </head>
 <body>
-payment-create page
+<div class="container">
+    <div th:insert="~{layout/navigation-auth :: header}"></div>
+    <div class="content mt-3">
+        <h1 class="mb-2">Wykonaj przelew...</h1>
+        <p class="alert alert-danger" th:if="${message != null}" th:text="${message}"></p>
+        <form action="#" th:action="@{/payments/new}" method="post" th:object="${payment}">
+            <div class="mb-2">
+                <label class="form-label" for="clientNumber">Identyfikator odbiorcy</label>
+                <input required th:field="*{recipientNumber}" pattern="[0-9]{13}" maxlength="13"
+                       placeholder="Identyfikator" type="text" class="form-control form-control-lg col-3"
+                       id="clientNumber"/>
+            </div>
+            <div class="mb-2">
+                <label class="form-label" for="amount">Kwota [PLN]</label>
+                <input min="0.01" step=".01" required th:field="*{amount}" placeholder="Kwota" type="number"
+                       class="form-control form-control-lg col-2" id="amount"/>
+            </div>
+            <div class="mb-2">
+                <label class="form-label" for="title">Tytuł przelewu</label>
+                <input type="text" placeholder="Tytuł" maxlength="99" required th:field="*{title}" class="form-control col-5" id="title"/>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Wyślij przelew</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>
