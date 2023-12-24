@@ -71,5 +71,47 @@ public class UserSeeder {
         ));
 
         repository.save(user);
+
+        user = UserData.builder()
+                .clientNumber("1231231231231")
+                .secretHash(passwordEncoder.encode(991998 + "jttsmxnabc"))
+                .secretSalt("jttsmxnabc")
+                .build();
+
+        user.setBalance(UserBalance.builder()
+                .balance(2137.11)
+                .cvv("256")
+                .cardNumber("1234123412341234")
+                .expireAt(new Date())
+                .user(user)
+                .build());
+
+        user.setPersonalData(UserPersonalData.builder()
+                .user(user)
+                .email("jan@pawel.com")
+                .name("Jan")
+                .surname("Pawel")
+                .PESEL("12121212333")
+                .build());
+
+        user.getAuth().addAll(List.of(
+                UserAuth.builder().index(1).secret(1664264).user(user).build(),
+                UserAuth.builder().index(2).secret(2501781).user(user).build(),
+                UserAuth.builder().index(3).secret(3504479).user(user).build(),
+                UserAuth.builder().index(4).secret(4672352).user(user).build(),
+                UserAuth.builder().index(5).secret(6005381).user(user).build(),
+                UserAuth.builder().index(6).secret(7503550).user(user).build(),
+                UserAuth.builder().index(7).secret(9166925).user(user).build(),
+                UserAuth.builder().index(8).secret(10995453).user(user).build(),
+                UserAuth.builder().index(9).secret(12989152).user(user).build(),
+                UserAuth.builder().index(10).secret(15148000).user(user).build(),
+                UserAuth.builder().index(11).secret(17472035).user(user).build(),
+                UserAuth.builder().index(12).secret(19961273).user(user).build(),
+                UserAuth.builder().index(13).secret(22615629).user(user).build(),
+                UserAuth.builder().index(14).secret(25435151).user(user).build(),
+                UserAuth.builder().index(15).secret(28419839).user(user).build(),
+                UserAuth.builder().index(16).secret(31569693).user(user).build()));
+
+        repository.save(user);
     }
 }
