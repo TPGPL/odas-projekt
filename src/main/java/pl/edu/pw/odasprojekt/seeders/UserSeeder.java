@@ -3,10 +3,7 @@ package pl.edu.pw.odasprojekt.seeders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import pl.edu.pw.odasprojekt.model.domain.UserAuth;
-import pl.edu.pw.odasprojekt.model.domain.UserBalance;
-import pl.edu.pw.odasprojekt.model.domain.UserData;
-import pl.edu.pw.odasprojekt.model.domain.UserPersonalData;
+import pl.edu.pw.odasprojekt.model.domain.*;
 import pl.edu.pw.odasprojekt.repositories.UserRepository;
 
 import java.util.Date;
@@ -62,6 +59,16 @@ public class UserSeeder {
                 UserAuth.builder().index(14).secret(78149839).user(user).build(),
                 UserAuth.builder().index(15).secret(89351489).user(user).build(),
                 UserAuth.builder().index(16).secret(101311349).user(user).build()));
+
+        var currentDate = new Date();
+
+        user.getPayments().addAll(List.of(
+                Payment.builder().recipient(user).title("Przelew numer 1").amount(12.22).sentAt(new Date(currentDate.getTime() + 10000)).build(),
+                Payment.builder().recipient(user).title("Przelew numer 2").amount(21.67).sentAt(new Date(currentDate.getTime() + 20000)).build(),
+                Payment.builder().recipient(user).title("Przelew numer 3").amount(33.42).sentAt(new Date(currentDate.getTime() + 30000)).build(),
+                Payment.builder().recipient(user).title("Przelew numer 4").amount(10.31).sentAt(new Date(currentDate.getTime() + 40000)).build(),
+                Payment.builder().recipient(user).title("Przelew numer 5").amount(9.88).sentAt(new Date(currentDate.getTime() + 50000)).build()
+        ));
 
         repository.save(user);
     }
