@@ -46,9 +46,14 @@ public class AuthController {
     public void forgetPasswordCommand() {
     }
 
-    // TODO: Add delay and limit attempts, redirect to dashboard if logged
+    // TODO: Limit attempts, redirect to dashboard if logged
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public String loginCommand(@ModelAttribute UserLoginDto user, RedirectAttributes redirectAttributes, HttpServletResponse response) {
+        try {
+            Thread.sleep(2000);
+        } catch(Exception ignored) {
+        }
+
         var resp = userService.login(user);
 
         if (!resp.isSuccess()) {
