@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Navigation logged</title>
+    <link th:href="@{/css/bootstrap.css}" type="text/css" rel="stylesheet" />
+</head>
+<body>
+    <header class="navbar navbar-expand-lg bg-light" th:fragment="header">
+        <div class="container-fluid">
+            <div class="navbar-brand">
+                nBank
+            </div>
+            <nav>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/dashboard}">Panel główny</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/details}">Dane klienta</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/payments}">Historia przelewów</a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="d-flex">
+                <a class="nav-link" href="#" th:href="@{/auth/logout}">Wyloguj...</a>
+            </div>
+        </div>
+    </header>
+</body>
+</html>
