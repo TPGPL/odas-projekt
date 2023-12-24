@@ -11,7 +11,7 @@
     <div class="content mt-3">
         <h1 class="mb-2">Wykonaj przelew...</h1>
         <p class="alert alert-danger" th:if="${message != null}" th:text="${message}"></p>
-        <form action="#" th:action="@{/payments/new}" method="post" th:object="${payment}">
+        <form action="#" th:action="@{/payments}" method="post" th:object="${payment}">
             <div class="mb-2">
                 <label class="form-label" for="clientNumber">Identyfikator odbiorcy</label>
                 <input required th:field="*{recipientNumber}" pattern="[0-9]{13}" maxlength="13"
