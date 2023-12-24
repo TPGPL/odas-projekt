@@ -3,8 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>[nBank] Historia przelewów</title>
+    <link th:href="@{/css/bootstrap.css}" type="text/css" rel="stylesheet" />
 </head>
 <body>
-payment-history page
+<div class="container">
+    <div th:insert="~{layout/navigation-auth :: header}"></div>
+    <div class="content mt-3">
+        <h1 class="mb-2">Historia przelewów</h1>
+        <div th:if="${!payments.iterator().hasNext()}">
+            <p class="alert alert-info">Brak przelewów do wyświetlenia!</p>
+        </div>
+        <div th:if="${payments.iterator().hasNext()}">
+            <table class="table table-striped table-hover align-middle">
+                <thead>
+                <tr>
+                    <th scope="col">Data odbioru</th>
+                    <th scope="col">Tytuł przelewu</th>
+                    <th scope="col">Kwota [zł]</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="payment: ${payments}">
+                    <td th:text="${payment.sentAt}"></td>
+                    <td th:text="${payment.title}"></td>
+                    <td th:text="${payment.amount}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>
