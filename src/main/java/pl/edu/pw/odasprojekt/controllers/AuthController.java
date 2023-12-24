@@ -68,4 +68,17 @@ public class AuthController {
 
         return "redirect:/dashboard";
     }
+
+    @RequestMapping(path = "/logout", method = RequestMethod.GET)
+    public String logout(HttpServletResponse response) {
+        var jwt = new Cookie("jwtToken", null);
+        jwt.setPath("/");
+        jwt.setHttpOnly(true);
+        jwt.setMaxAge(0);
+        //jwt.setSecure(true); // TODO
+
+        response.addCookie(jwt);
+
+        return "redirect:/";
+    }
 }
