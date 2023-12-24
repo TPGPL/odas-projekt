@@ -46,7 +46,7 @@ public class AuthController {
     public void forgetPasswordCommand() {
     }
 
-    // TODO: Add delay and limit attempts
+    // TODO: Add delay and limit attempts, redirect to dashboard if logged
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public String loginCommand(@ModelAttribute UserLoginDto user, RedirectAttributes redirectAttributes, HttpServletResponse response) {
         var resp = userService.login(user);
@@ -62,6 +62,7 @@ public class AuthController {
         jwt.setHttpOnly(true);
         //jwt.setSecure(true); // TODO
         jwt.setMaxAge(10 * 60);
+        jwt.setPath("/");
 
         response.addCookie(jwt);
 
