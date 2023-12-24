@@ -2,6 +2,7 @@ package pl.edu.pw.odasprojekt.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.edu.pw.odasprojekt.model.ServiceResponse;
 import pl.edu.pw.odasprojekt.model.domain.Payment;
 import pl.edu.pw.odasprojekt.repositories.PaymentRepository;
 
@@ -16,10 +17,11 @@ public class PaymentService {
         this.paymentRepository = paymentRepository;
     }
 
-    public Iterable<Payment> getAllPaymentsForClient(String clientNumber)
-    {
-        var user = userService;
+    public ServiceResponse<Iterable<Payment>> getAllPaymentsForClient(String clientNumber) {
+        var user = userService.getUserByClientNumber(clientNumber);
 
-        return null;
+        var payments = paymentRepository.findAllByRecipientId(user.getId());
+
+        return ServiceResponse.<Iterable<Payment>>builder().success(true).data(payments).build();
     }
 }
