@@ -11,8 +11,11 @@
     <div class="content mt-3">
         <h1 class="mb-2">Historia przelewów</h1>
         <div th:if="${!payments.iterator().hasNext()}">
-            <p class="alert alert-info">Brak przelewów do wyświetlenia!</p>
+            <p class="alert alert-info mb-2">Brak przelewów do wyświetlenia!</p>
         </div>
+
+        <a class="btn btn-primary mb-2" href="#" th:href="@{/payments/new}">Wykonaj przelew</a>
+
         <div th:if="${payments.iterator().hasNext()}">
             <table class="table table-striped table-hover align-middle">
                 <thead>
