@@ -2,9 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>[nBank] Dane użytkownika</title>
+    <title>[nBank] Dane klienta</title>
+    <link th:href="@{/css/bootstrap.css}" type="text/css" rel="stylesheet"/>
 </head>
 <body>
-user-details page
+<div class="container">
+    <div th:insert="~{layout/navigation-auth :: header}"></div>
+    <div class="content mt-3">
+        <h1 class="mb-2">Dane klienta</h1>
+        <a href="#" th:href="@{/details(display=${!shouldDisplay})}" class="btn btn-primary d-block col-3 mb-2"
+           th:text="${shouldDisplay?'Ukryj wrażliwe dane':'Wyświetl wrażliwe dane'}"></a>
+        <table class="table table-hover">
+            <tbody>
+            <tr>
+                <th scope="row">Imię</th>
+                <td th:text="${name}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Nazwisko</th>
+                <td th:text="${surname}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Adres e-mail</th>
+                <td th:text="${mail}"></td>
+            </tr>
+            <tr>
+                <th scope="row">PESEL</th>
+                <td th:text="${pesel}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Identyfikator</th>
+                <td th:text="${clientNumber}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Numer karty</th>
+                <td th:text="${cardNumber}"></td>
+            </tr>
+            <tr>
+                <th scope="row">CVV</th>
+                <td th:text="${cvv}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Data wygaśnięcia</th>
+                <td th:text="${expireDate}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>

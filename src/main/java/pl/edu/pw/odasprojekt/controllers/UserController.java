@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.edu.pw.odasprojekt.services.UserService;
 
 @Controller
@@ -31,7 +32,20 @@ public class UserController {
     }
 
     @RequestMapping(path = "/details", method = RequestMethod.GET)
-    public String details() {
+    public String details(@RequestParam(defaultValue = "false") boolean display, Model model) {
+        var clientNumber = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        var user = service.getUserByClientNumber(clientNumber);
+
+        model.addAttribute("shouldDisplay", display);
+        model.addAttribute("name", anonymizeData(user.getPersonalData().getName(), display));
+        model.addAttribute("surname", anonymizeData(user.getPersonalData().getSurname(), display));
+        model.addAttribute("mail", anonymizeData(user.getPersonalData().getEmail(), display));
+        model.addAttribute("pesel", anonymizeData(user.getPersonalData().getPESEL(), display));
+        model.addAttribute("clientNumber", anonymizeData(user.getClientNumber(), display));
+        model.addAttribute("cardNumber", anonymizeData(user.getBalance().getCardNumber(), display));
+        model.addAttribute("cvv", anonymizeData(user.getBalance().getCvv(), display));
+        model.addAttribute("expireDate", anonymizeData(user.getBalance().getExpireAt().toString(), display));
+
         return "user/details";
     }
 
@@ -48,5 +62,22 @@ public class UserController {
         }
 
         return spacedNumber.toString();
+    }
+
+    private String anonymizeData(String data, boolean shouldDisplay) {
+        if (shouldDisplay) {
+            return data;
+        }
+
+        var anonData = new StringBuilder();
+        int maxLength = Math.min(3, data.length() / 2);
+
+        for (int i = 0; i < maxLength; i++) {
+            anonData.append(data.charAt(i));
+        }
+
+        anonData.append("******");
+
+        return anonData.toString();
     }
 }
