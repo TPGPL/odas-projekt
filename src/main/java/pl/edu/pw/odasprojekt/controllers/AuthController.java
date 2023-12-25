@@ -33,7 +33,8 @@ public class AuthController {
     }
 
     @RequestMapping(path = "/forget-password", method = RequestMethod.GET)
-    public String forgetPassword() {
+    public String forgetPassword(Model model) {
+        model.addAttribute("email", "");
         return "forget-password";
     }
 
@@ -42,8 +43,12 @@ public class AuthController {
         return "change-password";
     }
 
-    @RequestMapping(path = "/change-password", method = RequestMethod.POST)
+    @RequestMapping(path = "/forget-password", method = RequestMethod.POST)
     public void forgetPasswordCommand() {
+    }
+
+    @RequestMapping(path = "/change-password", method = RequestMethod.POST)
+    public void changePasswordCommand() {
     }
 
     // TODO: Limit attempts, redirect to dashboard if logged
