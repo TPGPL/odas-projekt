@@ -13,9 +13,9 @@
         <p class="alert alert-danger" th:if="${message != null}" th:text="${message}"></p>
         <form action="#" th:action="@{/payments}" method="post" th:object="${payment}">
             <div class="mb-2">
-                <label class="form-label" for="clientNumber">Identyfikator odbiorcy</label>
-                <input required th:field="*{recipientNumber}" pattern="[0-9]{13}" maxlength="13"
-                       placeholder="Identyfikator" type="text" class="form-control form-control-lg col-3"
+                <label class="form-label" for="clientNumber">Numer karty odbiorcy</label>
+                <input required th:field="*{recipientNumber}" pattern="[0-9]{16}" maxlength="16"
+                       placeholder="Numer karty" type="text" class="form-control form-control-lg col-3"
                        id="clientNumber"/>
             </div>
             <div class="mb-2">

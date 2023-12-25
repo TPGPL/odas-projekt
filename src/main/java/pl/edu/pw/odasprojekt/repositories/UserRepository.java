@@ -7,7 +7,10 @@ import pl.edu.pw.odasprojekt.model.domain.UserData;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends CrudRepository<UserData,Integer> {
+public interface UserRepository extends CrudRepository<UserData, Integer> {
     Optional<UserData> findByClientNumber(String clientNumber);
+
+    Optional<UserData> findByBalanceCardNumber(String cardNumber);
+
     boolean existsByClientNumber(String clientNumber);
 }

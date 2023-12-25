@@ -30,6 +30,10 @@ public class UserService {
         return userRepository.findByClientNumber(clientNumber).orElse(null);
     }
 
+    public UserData getUserByCardNumber(String cardNumber) {
+        return userRepository.findByBalanceCardNumber(cardNumber).orElse(null);
+    }
+
     public ServiceResponse<String> login(UserLoginDto dto) {
         if (dto == null || !verifyClientNumber(dto.getClientNumber()) || !verifyPasswordFragments(dto.getPasswordFrags())) {
             return ServiceResponse.<String>builder().success(false).build();

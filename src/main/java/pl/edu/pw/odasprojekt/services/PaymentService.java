@@ -44,7 +44,7 @@ public class PaymentService {
                     .message("Niewystarczające środki na koncie!").build();
         }
 
-        var recipient = userService.getUserByClientNumber(dto.getRecipientNumber());
+        var recipient = userService.getUserByCardNumber(dto.getRecipientNumber());
 
         var payment = Payment.builder()
                 .amount(dto.getAmount())
@@ -70,11 +70,11 @@ public class PaymentService {
             return false;
         }
 
-        var clientNumber = dto.getRecipientNumber();
+        var cardNumber = dto.getRecipientNumber();
 
-        if (clientNumber == null || clientNumber.length() != 13
-                || !Pattern.compile("[0-9]{13}").matcher(clientNumber).find()
-                || userService.getUserByClientNumber(clientNumber) == null) {
+        if (cardNumber == null || cardNumber.length() != 16
+                || !Pattern.compile("[0-9]{16}").matcher(cardNumber).find()
+                || userService.getUserByCardNumber(cardNumber) == null) {
             return false;
         }
 
