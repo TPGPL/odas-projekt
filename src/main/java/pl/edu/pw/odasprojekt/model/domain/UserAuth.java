@@ -16,6 +16,7 @@ public class UserAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "idx")
     private int index;
     private int secret;
     @ManyToOne
