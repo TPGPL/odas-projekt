@@ -13,11 +13,13 @@ import java.util.regex.Pattern;
 @Service
 public class PaymentService {
     private final UserService userService;
+    private final BalanceService balanceService;
     private final PaymentRepository paymentRepository;
 
     @Autowired
-    public PaymentService(UserService userService, PaymentRepository paymentRepository) {
+    public PaymentService(UserService userService, BalanceService balanceService, PaymentRepository paymentRepository) {
         this.userService = userService;
+        this.balanceService = balanceService;
         this.paymentRepository = paymentRepository;
     }
 
@@ -36,9 +38,7 @@ public class PaymentService {
             return ServiceResponse.<Void>builder().success(false).build();
         }
 
-        var sender = userService.getUserByClientNumber(senderNumber);
-
-        if (sender.getBalance().getBalance() < dto.getAmount()) {
+        if (balanceService.getUserBalance(senderNumber) < dto.getAmount()) {
             return ServiceResponse.<Void>builder()
                     .success(false)
                     .message("Niewystarczające środki na koncie!").build();
@@ -53,8 +53,8 @@ public class PaymentService {
                 .sentAt(sentAt)
                 .build();
 
-        userService.adjustBalance(senderNumber, -dto.getAmount());
-        userService.adjustBalance(recipient.getClientNumber(), dto.getAmount());
+        balanceService.adjustUserBalance(senderNumber, -dto.getAmount());
+        balanceService.adjustUserBalance(recipient.getClientNumber(), dto.getAmount());
 
         paymentRepository.save(payment);
 
