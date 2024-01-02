@@ -37,6 +37,9 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
+        if (request.getCookies() == null)
+            return null;
+
         var jwtCookie = Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals("jwtToken")).findFirst();
 
         return jwtCookie.map(Cookie::getValue).orElse(null);
