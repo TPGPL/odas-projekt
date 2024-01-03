@@ -25,7 +25,7 @@ public class AuthService {
             secrets.put(id, authRepository.findByIndexAndUserId((int) id, userId).orElse(null));
         }
 
-        // mental asylum
+        // ...
         long i = indices[0], j = indices[1], k = indices[2];
         long secret1 = secrets.get(i).getSecret() + passFrags[0].getValue();
         long secret2 = secrets.get(j).getSecret() + passFrags[1].getValue();
@@ -34,6 +34,6 @@ public class AuthService {
         long top = (j * k * secret1) * (j - k) - (i * k * secret2) * (i - k) + (i * j * secret3) * (i - j);
         long bottom = (i - j) * (i - k) * (j - k);
 
-        return top / bottom; // pray
+        return top / bottom;
     }
 }
