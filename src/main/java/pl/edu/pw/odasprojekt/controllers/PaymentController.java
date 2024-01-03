@@ -1,6 +1,5 @@
 package pl.edu.pw.odasprojekt.controllers;
 
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -41,7 +40,7 @@ public class PaymentController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String createPaymentCommand(@ModelAttribute PaymentDto payment, RedirectAttributes redirectAttributes, HttpServletResponse response) {
+    public String createPaymentCommand(@ModelAttribute PaymentDto payment, RedirectAttributes redirectAttributes) {
         var senderNumber = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         var resp = service.createPayment(senderNumber, payment);
 
