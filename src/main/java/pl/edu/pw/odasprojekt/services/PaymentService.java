@@ -46,7 +46,7 @@ public class PaymentService {
                     .message("Niewystarczające środki na koncie!").build();
         }
 
-        if (senderNumber.equals(dto.getRecipientNumber())) {
+        if (dto.getRecipientNumber().equals(balanceService.getUserCardNumber(senderNumber))) {
             return ServiceResponse.<Void>builder()
                     .success(false)
                     .message("Nie możesz przesłać srodków na własną kartę!").build();

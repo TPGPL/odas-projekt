@@ -19,6 +19,12 @@ public class BalanceService {
         return balance != null ? balance.getBalance() : 0;
     }
 
+    public String getUserCardNumber(String userNumber) {
+        var balance = repository.findByUserClientNumber(userNumber).orElse(null);
+
+        return balance != null ? balance.getCardNumber() : null;
+    }
+
     public void adjustUserBalance(String userNumber, double amount) {
         var userBalance = repository.findByUserClientNumber(userNumber).orElse(null);
 
