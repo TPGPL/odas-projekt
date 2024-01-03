@@ -10,6 +10,7 @@
     <div th:insert="~{layout/navigation-auth :: header}"></div>
     <div class="content mt-3">
         <h1 class="mb-2">Panel użytkownika</h1>
+        <p class="alert alert-success" th:if="${successMessage != null}" th:text="${successMessage}"></p>
         <div class="row">
             <div class="col-6">
                 <div class="card">

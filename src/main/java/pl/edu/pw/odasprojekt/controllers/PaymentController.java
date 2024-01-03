@@ -53,6 +53,8 @@ public class PaymentController {
             return "redirect:/payments/new";
         }
 
-        return "redirect:/"; // TODO: Add message about correct payment
+        redirectAttributes.addFlashAttribute("successMessage","Przelew wykonany pomyślnie!");
+
+        return "redirect:/dashboard";
     }
 }
