@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.edu.pw.odasprojekt.services.UserService;
 
+import static pl.edu.pw.odasprojekt.utils.FormattingUtils.anonymizeData;
+import static pl.edu.pw.odasprojekt.utils.FormattingUtils.formatCardNumber;
+
 @Controller
 public class UserController {
     private final UserService service;
@@ -47,37 +50,5 @@ public class UserController {
         model.addAttribute("expireDate", anonymizeData(user.getBalance().getExpireAt().toString(), display));
 
         return "user/details";
-    }
-
-    private String formatCardNumber(String cardNumber) {
-        int spacing = 4;
-        var spacedNumber = new StringBuilder();
-
-        for (int i = 0; i < cardNumber.length(); i++) {
-            if (i % spacing == 0) {
-                spacedNumber.append(" ");
-            }
-
-            spacedNumber.append(cardNumber.charAt(i));
-        }
-
-        return spacedNumber.toString();
-    }
-
-    private String anonymizeData(String data, boolean shouldDisplay) {
-        if (shouldDisplay) {
-            return data;
-        }
-
-        var anonData = new StringBuilder();
-        int maxLength = Math.min(3, data.length() / 2);
-
-        for (int i = 0; i < maxLength; i++) {
-            anonData.append(data.charAt(i));
-        }
-
-        anonData.append("******");
-
-        return anonData.toString();
     }
 }
