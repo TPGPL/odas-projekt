@@ -79,7 +79,7 @@ public class AuthController {
         return "redirect:/dashboard";
     }
 
-    @RequestMapping(path = "/logout", method = RequestMethod.GET)
+    @RequestMapping(path = "/logout", method = RequestMethod.POST)
     public String logout(HttpServletResponse response) {
         var jwt = new Cookie("jwtToken", null);
         jwt.setPath("/");

@@ -25,7 +25,9 @@
                 </ul>
             </nav>
             <div class="d-flex">
-                <a class="nav-link" href="#" th:href="@{/auth/logout}">Wyloguj...</a>
+                <form method="post" action="#" th:action="@{/auth/logout}">
+                    <button class="btn btn-link" type="submit">Wyloguj...</button>
+                </form>
             </div>
         </div>
     </header>
