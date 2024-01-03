@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -22,6 +23,9 @@ public class UserData {
     private String clientNumber;
     private String secretHash;
     private String secretSalt;
+    private boolean isLocked;
+    private int failedLoginAttempts;
+    private Date lockedUntil;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "personal_id", referencedColumnName = "id")
     private UserPersonalData personalData;

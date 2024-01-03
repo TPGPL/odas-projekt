@@ -51,7 +51,7 @@ public class AuthController {
     public void changePasswordCommand() {
     }
 
-    // TODO: Limit attempts, redirect to dashboard if logged
+    // TODO: Redirect to dashboard if logged
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public String loginCommand(@ModelAttribute UserLoginDto user, RedirectAttributes redirectAttributes, HttpServletResponse response) {
         try {
@@ -62,7 +62,8 @@ public class AuthController {
         var resp = userService.login(user);
 
         if (!resp.isSuccess()) {
-            redirectAttributes.addFlashAttribute("message", "Nieprawidłowe dane logowania.");
+            var message = resp.getMessage() != null ? resp.getMessage() : "Nieprawidłowe dane logowania.";
+            redirectAttributes.addFlashAttribute("message", message);
 
             return "redirect:/auth/login";
         }
