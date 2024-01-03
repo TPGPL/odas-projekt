@@ -14,6 +14,22 @@ public class ValidatorUtils {
         return Pattern.compile("[0-9]{13}").matcher(clientNumber).find();
     }
 
+    public static boolean verifyCardNumber(String cardNumber) {
+        if (cardNumber == null || cardNumber.length() != 16) {
+            return false;
+        }
+
+        return Pattern.compile("[0-9]{16}").matcher(cardNumber).find();
+    }
+
+    public static boolean verifyPaymentTitle(String title) {
+        if (title == null || title.isEmpty() || title.length() > 99) {
+            return false;
+        }
+
+        return Pattern.compile("[A-Za-z0-9!.,? ]{1,99}").matcher(title).find();
+    }
+
     public static boolean verifyPasswordFragments(PasswordFragmentDto[] passwordFrags) {
         if (passwordFrags == null) {
             return false;

@@ -8,7 +8,9 @@ import pl.edu.pw.odasprojekt.model.dtos.PaymentDto;
 import pl.edu.pw.odasprojekt.repositories.PaymentRepository;
 
 import java.util.Date;
-import java.util.regex.Pattern;
+
+import static pl.edu.pw.odasprojekt.utils.ValidatorUtils.verifyCardNumber;
+import static pl.edu.pw.odasprojekt.utils.ValidatorUtils.verifyPaymentTitle;
 
 @Service
 public class PaymentService {
@@ -44,6 +46,12 @@ public class PaymentService {
                     .message("Niewystarczające środki na koncie!").build();
         }
 
+        if (senderNumber.equals(dto.getRecipientNumber())) {
+            return ServiceResponse.<Void>builder()
+                    .success(false)
+                    .message("Nie możesz przesłać srodków na własną kartę!").build();
+        }
+
         var recipient = userService.getUserByCardNumber(dto.getRecipientNumber());
 
         var payment = Payment.builder()
@@ -62,25 +70,16 @@ public class PaymentService {
     }
 
     private boolean validatePaymentData(PaymentDto dto) {
-        if (dto == null) {
-            return false;
-        }
-
-        if (dto.getAmount() <= 0) {
+        if (dto == null || dto.getAmount() <= 0) {
             return false;
         }
 
         var cardNumber = dto.getRecipientNumber();
 
-        if (cardNumber == null || cardNumber.length() != 16
-                || !Pattern.compile("[0-9]{16}").matcher(cardNumber).find()
-                || userService.getUserByCardNumber(cardNumber) == null) {
+        if (!verifyCardNumber(cardNumber) || !verifyPaymentTitle(dto.getTitle())) {
             return false;
         }
 
-        var title = dto.getTitle();
-
-        return title != null && !title.isEmpty() && title.length() <= 99
-                && Pattern.compile("[A-Za-z0-9!.,? ]").matcher(title).find();
+        return userService.getUserByCardNumber(cardNumber) != null;
     }
 }
