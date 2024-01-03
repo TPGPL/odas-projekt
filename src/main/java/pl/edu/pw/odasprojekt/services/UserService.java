@@ -5,11 +5,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.odasprojekt.model.ServiceResponse;
 import pl.edu.pw.odasprojekt.model.domain.UserData;
-import pl.edu.pw.odasprojekt.model.dtos.PasswordFragmentDto;
 import pl.edu.pw.odasprojekt.model.dtos.UserLoginDto;
 import pl.edu.pw.odasprojekt.repositories.UserRepository;
 
-import java.util.regex.Pattern;
+import static pl.edu.pw.odasprojekt.utils.ValidatorUtils.verifyClientNumber;
+import static pl.edu.pw.odasprojekt.utils.ValidatorUtils.verifyPasswordFragments;
 
 @Service
 public class UserService {
@@ -35,7 +35,7 @@ public class UserService {
     }
 
     public ServiceResponse<String> login(UserLoginDto dto) {
-        if (dto == null || !verifyClientNumber(dto.getClientNumber()) || !verifyPasswordFragments(dto.getPasswordFrags())) {
+        if (!validateLoginDto(dto) || !userRepository.existsByClientNumber(dto.getClientNumber())) {
             return ServiceResponse.<String>builder().success(false).build();
         }
 
@@ -45,52 +45,15 @@ public class UserService {
         String givenPassword = calculatedSecret + user.getSecretSalt();
 
         if (passwordEncoder.matches(givenPassword, user.getSecretHash())) {
-            return ServiceResponse.<String>builder().success(true).data(jwtService.generateJwtForUser(dto.getClientNumber())).build();
+            var jwtToken = jwtService.generateJwtForUser(dto.getClientNumber());
+
+            return ServiceResponse.<String>builder().success(true).data(jwtToken).build();
         }
 
         return ServiceResponse.<String>builder().success(false).build();
     }
 
-    public void adjustBalance(String clientNumber, double amount) {
-        var user = getUserByClientNumber(clientNumber);
-        var currentBalance = user.getBalance().getBalance();
-
-        user.getBalance().setBalance(currentBalance + amount);
-
-        userRepository.save(user);
-    }
-
-    private boolean verifyPasswordFragments(PasswordFragmentDto[] passwordFrags) {
-        if (passwordFrags == null) {
-            return false;
-        }
-
-        var pattern = Pattern.compile("[0-9a-zA-Z@!$%]");
-
-        for (var frag : passwordFrags) {
-            if (frag == null)
-                return false;
-
-            if (frag.getIndex() < 0 || frag.getIndex() > 15)
-                return false;
-
-            if (!pattern.matcher(String.valueOf(frag.getValue())).find()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private boolean verifyClientNumber(String clientNumber) {
-        if (clientNumber == null || clientNumber.length() != 13) {
-            return false;
-        }
-
-        if (!Pattern.compile("[0-9]{13}").matcher(clientNumber).find()) {
-            return false;
-        }
-
-        return userRepository.existsByClientNumber(clientNumber);
+    private boolean validateLoginDto(UserLoginDto dto) {
+        return dto != null && verifyClientNumber(dto.getClientNumber()) && verifyPasswordFragments(dto.getPasswordFrags());
     }
 }
