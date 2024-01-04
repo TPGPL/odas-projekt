@@ -58,7 +58,7 @@ public class AuthService {
 
         entropy *= -1;
 
-        return entropy > 5;
+        return entropy > 4;
     }
 
     public int changePassword(int userId, String password) {
