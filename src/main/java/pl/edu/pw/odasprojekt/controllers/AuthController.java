@@ -93,9 +93,9 @@ public class AuthController {
             return String.format("redirect:/auth/change-password?token=%s", data.getToken());
         }
 
-        redirectAttributes.addFlashAttribute("success", true);
+        redirectAttributes.addFlashAttribute("success", "Hasło zostało zmienione!");
 
-        return String.format("redirect:/auth/change-password?token=%s", data.getToken());
+        return "redirect:/auth/login";
     }
 
     // TODO: Redirect to dashboard if logged

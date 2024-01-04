@@ -11,6 +11,7 @@
     <div class="content mt-2">
         <h1 class="mb-2">Zaloguj się...</h1>
         <p class="alert alert-danger" th:if="${message != null}" th:text="${message}"></p>
+        <p class="alert alert-success" th:if="${success != null}" th:text="${success}"></p>
         <form action="#" th:action="@{/auth/login}" method="post" th:object="${user}">
             <div>
                 <label class="form-label" for="clientNumber">Identyfikator klienta</label>
