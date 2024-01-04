@@ -8,11 +8,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.edu.pw.odasprojekt.model.dtos.ChangePasswordDto;
 import pl.edu.pw.odasprojekt.model.dtos.ForgetPasswordDto;
 import pl.edu.pw.odasprojekt.model.dtos.UserLoginDto;
 import pl.edu.pw.odasprojekt.services.PasswordResetService;
 import pl.edu.pw.odasprojekt.services.UserService;
+
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/auth")
@@ -46,7 +50,15 @@ public class AuthController {
     }
 
     @RequestMapping(path = "/change-password", method = RequestMethod.GET)
-    public String changePassword() {
+    public String changePassword(@RequestParam String token, Model model, HttpServletResponse response) throws IOException {
+        if (!resetService.verifyTokenValidity(token)) {
+            response.sendError(403);
+        }
+
+        var dto = ChangePasswordDto.builder().token(token).build();
+
+        model.addAttribute("data", dto);
+
         return "change-password";
     }
 

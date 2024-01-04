@@ -30,6 +30,14 @@ public class ValidatorUtils {
         return Pattern.compile("[A-Za-z0-9!.,? ]{1,99}").matcher(title).find();
     }
 
+    public static boolean verifyResetToken(String token) {
+        if (token == null || token.isEmpty() || token.length() > 50) {
+            return false;
+        }
+
+        return Pattern.compile("[0-9a-f-]{1,50}").matcher(token).find();
+    }
+
     public static boolean verifyPasswordFragments(PasswordFragmentDto[] passwordFrags) {
         if (passwordFrags == null) {
             return false;

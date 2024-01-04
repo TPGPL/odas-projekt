@@ -10,6 +10,8 @@ import pl.edu.pw.odasprojekt.repositories.PasswordResetTokenRepository;
 import java.util.Date;
 import java.util.UUID;
 
+import static pl.edu.pw.odasprojekt.utils.ValidatorUtils.verifyResetToken;
+
 @Service
 public class PasswordResetService {
     private final static int VALID_TIME = 30 * 60 * 1000;
@@ -53,6 +55,19 @@ public class PasswordResetService {
         repository.save(resetToken);
 
         System.out.printf("Wysyłam email na adres %s z linkiem URL/change-password?token=%s%n", dto.getEmail(), token);
+    }
+
+    public boolean verifyTokenValidity(String token) {
+        if (!verifyResetToken(token) || !repository.existsByToken(token)) {
+            return false;
+        }
+
+        var resetToken = repository.findByToken(token).orElse(null);
+        var currentTime = new Date().getTime();
+
+        assert resetToken != null;
+
+        return resetToken.getExpireAt().getTime() > currentTime;
     }
 
     private boolean validateForgetDto(ForgetPasswordDto dto) {
