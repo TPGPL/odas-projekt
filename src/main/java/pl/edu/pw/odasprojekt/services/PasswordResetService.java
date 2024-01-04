@@ -1,5 +1,6 @@
 package pl.edu.pw.odasprojekt.services;
 
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.odasprojekt.model.domain.PasswordResetToken;
@@ -14,15 +15,19 @@ public class PasswordResetService {
     private final static int VALID_TIME = 30 * 60 * 1000;
     private final PasswordResetTokenRepository repository;
     private final UserService userService;
+    private final Validator validator;
 
     @Autowired
-    public PasswordResetService(PasswordResetTokenRepository repository, UserService userService) {
+    public PasswordResetService(PasswordResetTokenRepository repository, UserService userService, Validator validator) {
         this.repository = repository;
         this.userService = userService;
+        this.validator = validator;
     }
 
     public void handleForgetRequest(ForgetPasswordDto dto) {
-        // TODO: validate dto when jakarta validation is available
+        if (!validateForgetDto(dto)) {
+            return;
+        }
 
         var user = userService.getUserByEmail(dto.getEmail());
 
@@ -48,5 +53,15 @@ public class PasswordResetService {
         repository.save(resetToken);
 
         System.out.printf("Wysyłam email na adres %s z linkiem URL/change-password?token=%s%n", dto.getEmail(), token);
+    }
+
+    private boolean validateForgetDto(ForgetPasswordDto dto) {
+        if (dto == null) {
+            return false;
+        }
+
+        var violations = validator.validate(dto);
+
+        return violations.isEmpty();
     }
 }
