@@ -38,7 +38,7 @@ public class PasswordResetService {
 
         var user = userService.getUserByEmail(dto.getEmail());
 
-        if (user == null) {
+        if (user == null || user.isLocked()) {
             return;
         }
 
@@ -59,7 +59,7 @@ public class PasswordResetService {
 
         repository.save(resetToken);
 
-        System.out.printf("Wysyłam email na adres %s z linkiem URL/change-password?token=%s%n", dto.getEmail(), token);
+        System.out.printf("Wysyłam email na adres %s z linkiem BASE_URL/auth/change-password?token=%s%n", dto.getEmail(), token);
     }
 
     public boolean verifyTokenValidity(String token) {
