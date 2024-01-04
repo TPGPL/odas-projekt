@@ -38,6 +38,10 @@ public class UserService {
         return userRepository.findByBalanceCardNumber(cardNumber).orElse(null);
     }
 
+    public UserData getUserByEmail(String email) {
+        return userRepository.findByPersonalDataEmail(email).orElse(null);
+    }
+
     public ServiceResponse<String> login(UserLoginDto dto) {
         if (!validateLoginDto(dto) || !userRepository.existsByClientNumber(dto.getClientNumber())) {
             return ServiceResponse.<String>builder().success(false).build();

@@ -9,17 +9,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.edu.pw.odasprojekt.model.dtos.ForgetPasswordDto;
 import pl.edu.pw.odasprojekt.model.dtos.UserLoginDto;
+import pl.edu.pw.odasprojekt.services.PasswordResetService;
 import pl.edu.pw.odasprojekt.services.UserService;
 
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
     private final UserService userService;
+    private final PasswordResetService resetService;
 
     @Autowired
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, PasswordResetService resetService) {
         this.userService = userService;
+        this.resetService = resetService;
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.GET)
@@ -34,7 +38,10 @@ public class AuthController {
 
     @RequestMapping(path = "/forget-password", method = RequestMethod.GET)
     public String forgetPassword(Model model) {
-        model.addAttribute("email", "");
+        var forgetPasswordDto = new ForgetPasswordDto();
+
+        model.addAttribute("data", forgetPasswordDto);
+
         return "forget-password";
     }
 
@@ -44,7 +51,17 @@ public class AuthController {
     }
 
     @RequestMapping(path = "/forget-password", method = RequestMethod.POST)
-    public void forgetPasswordCommand() {
+    public String forgetPasswordCommand(@ModelAttribute ForgetPasswordDto data, RedirectAttributes redirectAttributes) {
+        try {
+            Thread.sleep(2000);
+        } catch (Exception ignored) {
+        }
+
+        resetService.handleForgetRequest(data);
+
+        redirectAttributes.addFlashAttribute("wasSent", true);
+
+        return "redirect:/auth/forget-password";
     }
 
     @RequestMapping(path = "/change-password", method = RequestMethod.POST)

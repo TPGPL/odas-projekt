@@ -11,6 +11,6 @@ public interface UserRepository extends CrudRepository<UserData, Integer> {
     Optional<UserData> findByClientNumber(String clientNumber);
 
     Optional<UserData> findByBalanceCardNumber(String cardNumber);
-
+    Optional<UserData> findByPersonalDataEmail(String email);
     boolean existsByClientNumber(String clientNumber);
 }

@@ -26,7 +26,7 @@ public class UserData {
     private boolean isLocked;
     private int failedLoginAttempts;
     private Date lockedUntil;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "personal_id", referencedColumnName = "id")
     private UserPersonalData personalData;
     @OneToOne(cascade = CascadeType.ALL)
