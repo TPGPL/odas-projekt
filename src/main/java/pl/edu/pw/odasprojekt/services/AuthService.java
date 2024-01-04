@@ -16,12 +16,10 @@ public class AuthService {
     private final static int PASS_LENGTH = 16;
     private final static int MAX_SECRET_VALUE = 1000000;
     private final AuthRepository authRepository;
-    private final UserService userService;
 
     @Autowired
-    public AuthService(AuthRepository authRepository, UserService userService) {
+    public AuthService(AuthRepository authRepository) {
         this.authRepository = authRepository;
-        this.userService = userService;
     }
 
     public long calculateLoginSecret(int userId, PasswordFragmentDto[] passFrags) {
@@ -63,7 +61,7 @@ public class AuthService {
         return entropy > 5;
     }
 
-    public void changePassword(int userId, String password) {
+    public int changePassword(int userId, String password) {
         var secrets = authRepository.findAllByUserId(userId);
 
         var rand = new Random();
@@ -83,8 +81,9 @@ public class AuthService {
             secret.setSecret(newSecrets.get(secret.getIndex()));
         }
 
-        userService.updatePassword(userId, K);
         authRepository.saveAll(secrets);
+
+        return K;
     }
 
     private double calculateCharEntropy(String password, char ch) {

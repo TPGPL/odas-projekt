@@ -89,9 +89,9 @@ public class PasswordResetService {
         }
 
         var bearerId = getTokenBearerId(dto.getToken());
+        int secret = authService.changePassword(bearerId, dto.getPassword());
 
-        authService.changePassword(bearerId, dto.getPassword());
-
+        userService.updatePassword(bearerId, secret);
         invalidateToken(dto.getToken());
 
         return ServiceResponse.<Void>builder().success(true).build();
