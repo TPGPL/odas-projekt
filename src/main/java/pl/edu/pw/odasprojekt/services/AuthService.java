@@ -2,19 +2,26 @@ package pl.edu.pw.odasprojekt.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import pl.edu.pw.odasprojekt.model.domain.UserAuth;
 import pl.edu.pw.odasprojekt.model.dtos.PasswordFragmentDto;
 import pl.edu.pw.odasprojekt.repositories.AuthRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 @Service
 public class AuthService {
+    private final static int PASS_LENGTH = 16;
+    private final static int MAX_SECRET_VALUE = 1000000;
     private final AuthRepository authRepository;
+    private final UserService userService;
 
     @Autowired
-    public AuthService(AuthRepository authRepository) {
+    public AuthService(AuthRepository authRepository, UserService userService) {
         this.authRepository = authRepository;
+        this.userService = userService;
     }
 
     public long calculateLoginSecret(int userId, PasswordFragmentDto[] passFrags) {
@@ -35,5 +42,56 @@ public class AuthService {
         long bottom = (i - j) * (i - k) * (j - k);
 
         return top / bottom;
+    }
+
+    public boolean verifyPasswordStrength(String password) {
+        double entropy = 0;
+        var chars = new ArrayList<Character>();
+
+        for (var ch : password.toCharArray()) {
+            if (!chars.contains(ch)) {
+                chars.add(ch);
+            }
+        }
+
+        for (var ch : chars) {
+            entropy += calculateCharEntropy(password, ch);
+        }
+
+        entropy *= -1;
+
+        return entropy > 5;
+    }
+
+    public void changePassword(int userId, String password) {
+        var secrets = authRepository.findAllByUserId(userId);
+
+        var rand = new Random();
+
+        int K = rand.nextInt(MAX_SECRET_VALUE);
+        int R1 = rand.nextInt(MAX_SECRET_VALUE);
+        int R2 = rand.nextInt(MAX_SECRET_VALUE);
+
+        var newSecrets = new HashMap<Integer, Integer>();
+
+        for (int i = 1; i <= password.length(); i++) {
+            int s = (K + R1 * i + R2 * i * i) - (password.charAt(i - 1));
+            newSecrets.put(i, s);
+        }
+
+        for (var secret : secrets) {
+            secret.setSecret(newSecrets.get(secret.getIndex()));
+        }
+
+        userService.updatePassword(userId, K);
+        authRepository.saveAll(secrets);
+    }
+
+    private double calculateCharEntropy(String password, char ch) {
+        int count = StringUtils.countOccurrencesOf(password, Character.toString(ch));
+
+        double prob = count / (double) PASS_LENGTH;
+
+        return (Math.log(prob) / Math.log(2)) * prob;
     }
 }

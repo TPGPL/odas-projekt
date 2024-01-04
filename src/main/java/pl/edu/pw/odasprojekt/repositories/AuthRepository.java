@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface AuthRepository extends CrudRepository<UserAuth, Integer> {
     Optional<UserAuth> findByIndexAndUserId(int index, int id);
-    void deleteAllByUserId(int id);
+
+    Iterable<UserAuth> findAllByUserId(int id);
 }

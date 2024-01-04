@@ -84,6 +84,20 @@ public class UserService {
         return ServiceResponse.<String>builder().success(false).build();
     }
 
+    public void updatePassword(int userId, int K) {
+        var user = userRepository.findById(userId).orElse(null);
+
+        if (user == null) {
+            return;
+        }
+
+        String newPassword = K + user.getSecretSalt();
+
+        user.setSecretHash(passwordEncoder.encode(newPassword));
+
+        userRepository.save(user);
+    }
+
     private boolean validateLoginDto(UserLoginDto dto) {
         return dto != null && verifyClientNumber(dto.getClientNumber()) && verifyPasswordFragments(dto.getPasswordFrags());
     }

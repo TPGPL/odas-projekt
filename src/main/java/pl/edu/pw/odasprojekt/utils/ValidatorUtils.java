@@ -38,6 +38,15 @@ public class ValidatorUtils {
         return Pattern.compile("[0-9a-f-]{1,50}").matcher(token).find();
     }
 
+    public static boolean verifyPassword(String password) {
+        if (password == null || password.length() != 16) {
+            return false;
+        }
+
+        return Pattern.compile("[a-zA-Z0-9@!%$ ]{16}").matcher(password).find();
+    }
+
+    // TODO: refactor this function to only verify a single fragment
     public static boolean verifyPasswordFragments(PasswordFragmentDto[] passwordFrags) {
         if (passwordFrags == null) {
             return false;
