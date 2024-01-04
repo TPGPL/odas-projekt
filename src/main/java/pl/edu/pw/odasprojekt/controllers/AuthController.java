@@ -62,8 +62,9 @@ public class AuthController {
         var resp = userService.login(user);
 
         if (!resp.isSuccess()) {
-            var message = resp.getMessage() != null ? resp.getMessage() : "Nieprawidłowe dane logowania.";
-            redirectAttributes.addFlashAttribute("message", message);
+            // TODO: Decide if account block message should actually be shown
+            //var message = resp.getMessage() != null ? resp.getMessage() : "Nieprawidłowe dane logowania.";
+            redirectAttributes.addFlashAttribute("message", "Nieprawidłowe dane logowania.");
 
             return "redirect:/auth/login";
         }
