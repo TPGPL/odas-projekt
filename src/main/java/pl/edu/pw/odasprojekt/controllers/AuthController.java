@@ -77,7 +77,25 @@ public class AuthController {
     }
 
     @RequestMapping(path = "/change-password", method = RequestMethod.POST)
-    public void changePasswordCommand() {
+    public String changePasswordCommand(@ModelAttribute ChangePasswordDto data, RedirectAttributes redirectAttributes) {
+        try {
+            Thread.sleep(2000);
+        } catch (Exception ignored) {
+        }
+
+        var response = resetService.handleChangeRequest(data);
+
+        if (!response.isSuccess()) {
+            var message = response.getMessage() != null ? response.getMessage() : "Wprowadzono nieprawidłowe dane";
+
+            redirectAttributes.addFlashAttribute("message", message);
+
+            return String.format("redirect:/auth/change-password?token=%s", data.getToken());
+        }
+
+        redirectAttributes.addFlashAttribute("success", true);
+
+        return String.format("redirect:/auth/change-password?token=%s", data.getToken());
     }
 
     // TODO: Redirect to dashboard if logged
@@ -85,7 +103,7 @@ public class AuthController {
     public String loginCommand(@ModelAttribute UserLoginDto user, RedirectAttributes redirectAttributes, HttpServletResponse response) {
         try {
             Thread.sleep(2000);
-        } catch(Exception ignored) {
+        } catch (Exception ignored) {
         }
 
         var resp = userService.login(user);
