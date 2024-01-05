@@ -13,20 +13,20 @@ public class BalanceService {
         this.repository = repository;
     }
 
-    public double getUserBalance(String userNumber) {
-        var balance = repository.findByUserClientNumber(userNumber).orElse(null);
+    public double getUserBalance(String clientNumber) {
+        var balance = repository.findByUserClientNumber(clientNumber).orElse(null);
 
         return balance != null ? balance.getBalance() : 0;
     }
 
-    public String getUserCardNumber(String userNumber) {
-        var balance = repository.findByUserClientNumber(userNumber).orElse(null);
+    public String getUserCardNumber(String clientNumber) {
+        var balance = repository.findByUserClientNumber(clientNumber).orElse(null);
 
         return balance != null ? balance.getCardNumber() : null;
     }
 
-    public void adjustUserBalance(String userNumber, double amount) {
-        var userBalance = repository.findByUserClientNumber(userNumber).orElse(null);
+    public void adjustUserBalance(String clientNumber, double amount) {
+        var userBalance = repository.findByUserClientNumber(clientNumber).orElse(null);
 
         if (userBalance == null) {
             return;
