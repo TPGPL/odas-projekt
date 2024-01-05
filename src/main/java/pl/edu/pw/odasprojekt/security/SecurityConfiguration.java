@@ -30,6 +30,8 @@ public class SecurityConfiguration {
                         auth
                                 .requestMatchers("/auth/logout").authenticated()
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/auth/**")).permitAll()
+                                .requestMatchers("/static").permitAll()
+                                .requestMatchers("/admin").permitAll()
                                 .requestMatchers("/").permitAll()
                                 .anyRequest().authenticated());
 
