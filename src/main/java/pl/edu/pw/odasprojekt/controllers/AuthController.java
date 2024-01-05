@@ -3,6 +3,7 @@ package pl.edu.pw.odasprojekt.controllers;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,6 +19,8 @@ import pl.edu.pw.odasprojekt.services.UserService;
 
 import java.io.IOException;
 
+import static pl.edu.pw.odasprojekt.utils.AuthUtils.isAuthorized;
+
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
@@ -32,6 +35,12 @@ public class AuthController {
 
     @RequestMapping(path = "/login", method = RequestMethod.GET)
     public String login(Model model) {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (isAuthorized(auth)) {
+            return "redirect:/dashboard";
+        }
+
         var userLoginDto = UserLoginDto.builder().build();
         userLoginDto.selectPasswordFragments();
 
@@ -42,6 +51,12 @@ public class AuthController {
 
     @RequestMapping(path = "/forget-password", method = RequestMethod.GET)
     public String forgetPassword(Model model) {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (isAuthorized(auth)) {
+            return "redirect:/dashboard";
+        }
+
         var forgetPasswordDto = new ForgetPasswordDto();
 
         model.addAttribute("data", forgetPasswordDto);
@@ -98,7 +113,6 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
-    // TODO: Redirect to dashboard if logged
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public String loginCommand(@ModelAttribute UserLoginDto user, RedirectAttributes redirectAttributes, HttpServletResponse response) {
         try {
