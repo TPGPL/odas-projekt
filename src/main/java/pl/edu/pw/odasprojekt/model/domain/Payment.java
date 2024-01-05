@@ -24,4 +24,7 @@ public class Payment {
     @ManyToOne
     @JoinColumn(name = "recipient_id", referencedColumnName = "id")
     private UserData recipient;
+    @ManyToOne
+    @JoinColumn(name = "sender_id", referencedColumnName = "id")
+    private UserData sender;
 }

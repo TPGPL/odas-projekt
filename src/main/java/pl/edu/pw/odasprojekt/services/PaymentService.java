@@ -27,8 +27,14 @@ public class PaymentService {
 
     public ServiceResponse<Iterable<Payment>> getAllPaymentsForClient(String clientNumber) {
         var user = userService.getUserByClientNumber(clientNumber);
+        var userId = user.getId();
+        var payments = paymentRepository.findAllByRecipientIdOrSenderId(userId, userId);
 
-        var payments = paymentRepository.findAllByRecipientId(user.getId());
+        for (var payment : payments) {
+            if (payment.getSender().getClientNumber().equals(clientNumber)) {
+                payment.setAmount(payment.getAmount() * -1);
+            }
+        }
 
         return ServiceResponse.<Iterable<Payment>>builder().success(true).data(payments).build();
     }
@@ -52,12 +58,14 @@ public class PaymentService {
                     .message("Nie możesz przesłać srodków na własną kartę!").build();
         }
 
+        var sender = userService.getUserByClientNumber(senderNumber);
         var recipient = userService.getUserByCardNumber(dto.getRecipientNumber());
 
         var payment = Payment.builder()
                 .amount(dto.getAmount())
                 .title(dto.getTitle())
                 .recipient(recipient)
+                .sender(sender)
                 .sentAt(sentAt)
                 .build();
 

@@ -52,7 +52,7 @@ public class PaymentController {
             return "redirect:/payments/new";
         }
 
-        redirectAttributes.addFlashAttribute("successMessage","Przelew wykonany pomyślnie!");
+        redirectAttributes.addFlashAttribute("successMessage", "Przelew wykonany pomyślnie!");
 
         return "redirect:/dashboard";
     }

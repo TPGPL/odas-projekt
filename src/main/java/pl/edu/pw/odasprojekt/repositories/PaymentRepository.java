@@ -6,5 +6,5 @@ import pl.edu.pw.odasprojekt.model.domain.Payment;
 
 @Repository
 public interface PaymentRepository extends CrudRepository<Payment, Integer> {
-    Iterable<Payment> findAllByRecipientId(int id);
+    Iterable<Payment> findAllByRecipientIdOrSenderId(int recipientId, int senderId);
 }

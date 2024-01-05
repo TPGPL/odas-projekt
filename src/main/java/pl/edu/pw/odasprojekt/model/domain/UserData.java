@@ -37,5 +37,8 @@ public class UserData {
     private List<UserAuth> auth = new ArrayList<>();
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<Payment> payments = new ArrayList<>();
+    private List<Payment> recievedPayments = new ArrayList<>();
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Payment> sentPayments = new ArrayList<>();
 }
