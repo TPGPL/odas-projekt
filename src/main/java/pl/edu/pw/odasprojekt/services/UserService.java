@@ -9,9 +9,9 @@ import pl.edu.pw.odasprojekt.model.dtos.UserLoginDto;
 import pl.edu.pw.odasprojekt.repositories.UserRepository;
 
 import java.util.Date;
+import java.util.HashSet;
 
-import static pl.edu.pw.odasprojekt.utils.ValidatorUtils.verifyClientNumber;
-import static pl.edu.pw.odasprojekt.utils.ValidatorUtils.verifyPasswordFragments;
+import static pl.edu.pw.odasprojekt.utils.ValidatorUtils.*;
 
 @Service
 public class UserService {
@@ -99,7 +99,21 @@ public class UserService {
     }
 
     private boolean validateLoginDto(UserLoginDto dto) {
-        return dto != null && verifyClientNumber(dto.getClientNumber()) && verifyPasswordFragments(dto.getPasswordFrags());
+        if (dto == null || dto.getPasswordFrags() == null || !verifyClientNumber(dto.getClientNumber())) {
+            return false;
+        }
+
+        var indexes = new HashSet<Integer>();
+
+        for (var pass : dto.getPasswordFrags()) {
+            if (!verifyPasswordFragment(pass)) {
+                return false;
+            }
+
+            indexes.add(pass.getIndex());
+        }
+
+        return indexes.size() == 3;
     }
 
     private boolean shouldUnlock(UserData user) {

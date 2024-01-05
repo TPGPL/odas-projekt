@@ -2,7 +2,6 @@ package pl.edu.pw.odasprojekt.utils;
 
 import pl.edu.pw.odasprojekt.model.dtos.PasswordFragmentDto;
 
-import java.util.HashSet;
 import java.util.regex.Pattern;
 
 public class ValidatorUtils {
@@ -46,29 +45,11 @@ public class ValidatorUtils {
         return Pattern.compile("[a-zA-Z0-9@!%$ ]{16}").matcher(password).find();
     }
 
-    // TODO: refactor this function to only verify a single fragment
-    public static boolean verifyPasswordFragments(PasswordFragmentDto[] passwordFrags) {
-        if (passwordFrags == null) {
+    public static boolean verifyPasswordFragment(PasswordFragmentDto pass) {
+        if (pass == null || pass.getIndex() < 0 || pass.getIndex() > 15) {
             return false;
         }
 
-        var pattern = Pattern.compile("[0-9a-zA-Z@!$% ]");
-        var indexes = new HashSet<Integer>();
-
-        for (var frag : passwordFrags) {
-            if (frag == null)
-                return false;
-
-            if (frag.getIndex() < 0 || frag.getIndex() > 15)
-                return false;
-
-            if (!pattern.matcher(String.valueOf(frag.getValue())).find()) {
-                return false;
-            }
-
-            indexes.add(frag.getIndex());
-        }
-
-        return indexes.size() == 3;
+        return Pattern.compile("[0-9a-zA-Z@!$% ]").matcher(String.valueOf(pass.getValue())).find();
     }
 }
