@@ -1,9 +1,11 @@
 package pl.edu.pw.odasprojekt.services;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.odasprojekt.model.ServiceResponse;
+import pl.edu.pw.odasprojekt.model.domain.EventType;
 import pl.edu.pw.odasprojekt.model.domain.PasswordResetToken;
 import pl.edu.pw.odasprojekt.model.dtos.ChangePasswordDto;
 import pl.edu.pw.odasprojekt.model.dtos.ForgetPasswordDto;
@@ -20,18 +22,20 @@ public class PasswordResetService {
     private final static int VALID_TIME = 30 * 60 * 1000;
     private final PasswordResetTokenRepository tokenRepository;
     private final UserService userService;
+    private final LogService logService;
     private final AuthService authService;
     private final Validator validator;
 
     @Autowired
-    public PasswordResetService(PasswordResetTokenRepository tokenRepository, UserService userService, AuthService authService, Validator validator) {
+    public PasswordResetService(PasswordResetTokenRepository tokenRepository, UserService userService, LogService logService, AuthService authService, Validator validator) {
         this.tokenRepository = tokenRepository;
         this.userService = userService;
+        this.logService = logService;
         this.authService = authService;
         this.validator = validator;
     }
 
-    public void handleForgetRequest(ForgetPasswordDto dto) {
+    public void handleForgetRequest(HttpServletRequest request, ForgetPasswordDto dto) {
         if (!validateForgetDto(dto)) {
             return;
         }
@@ -41,6 +45,8 @@ public class PasswordResetService {
         if (user == null || user.isLocked()) {
             return;
         }
+
+        logService.createUserLog(request, EventType.ResetRequest, user);
 
         var createdDate = new Date();
         var validTo = new Date(createdDate.getTime() + VALID_TIME);
@@ -73,7 +79,7 @@ public class PasswordResetService {
         return resetToken != null && resetToken.getExpireAt().getTime() > currentTime;
     }
 
-    public ServiceResponse<Void> handleChangeRequest(ChangePasswordDto dto) {
+    public ServiceResponse<Void> handleChangeRequest(HttpServletRequest request, ChangePasswordDto dto) {
         if (!validateChangeDto(dto)) {
             return ServiceResponse.<Void>builder().success(false).message("Wprowadzono nieprawidłowe dane!").build();
         }
@@ -87,8 +93,10 @@ public class PasswordResetService {
         }
 
         var bearerId = getTokenBearerId(dto.getToken());
+        var user = userService.getUserById(bearerId);
         int secret = authService.changePassword(bearerId, dto.getPassword());
 
+        logService.createUserLog(request, EventType.PasswordReset, user);
         userService.updatePassword(bearerId, secret);
         invalidateToken(dto.getToken());
 

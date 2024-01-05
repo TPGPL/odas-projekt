@@ -34,6 +34,10 @@ public class UserService {
         return userRepository.findByClientNumber(clientNumber).orElse(null);
     }
 
+    public UserData getUserById(int id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
     public UserData getUserByCardNumber(String cardNumber) {
         return userRepository.findByBalanceCardNumber(cardNumber).orElse(null);
     }

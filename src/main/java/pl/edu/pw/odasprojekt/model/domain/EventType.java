@@ -5,6 +5,5 @@ public enum EventType {
     LoginSuccess,
     ResetRequest,
     PasswordReset,
-    AccountLock,
     HoneypotCapture
 }

@@ -1,6 +1,7 @@
 package pl.edu.pw.odasprojekt.controllers;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -78,13 +79,13 @@ public class AuthController {
     }
 
     @RequestMapping(path = "/forget-password", method = RequestMethod.POST)
-    public String forgetPasswordCommand(@ModelAttribute ForgetPasswordDto data, RedirectAttributes redirectAttributes) {
+    public String forgetPasswordCommand(@ModelAttribute ForgetPasswordDto data, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Thread.sleep(2000);
         } catch (Exception ignored) {
         }
 
-        resetService.handleForgetRequest(data);
+        resetService.handleForgetRequest(request, data);
 
         redirectAttributes.addFlashAttribute("wasSent", true);
 
@@ -92,13 +93,13 @@ public class AuthController {
     }
 
     @RequestMapping(path = "/change-password", method = RequestMethod.POST)
-    public String changePasswordCommand(@ModelAttribute ChangePasswordDto data, RedirectAttributes redirectAttributes) {
+    public String changePasswordCommand(@ModelAttribute ChangePasswordDto data, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Thread.sleep(2000);
         } catch (Exception ignored) {
         }
 
-        var response = resetService.handleChangeRequest(data);
+        var response = resetService.handleChangeRequest(request, data);
 
         if (!response.isSuccess()) {
             var message = response.getMessage() != null ? response.getMessage() : "Wprowadzono nieprawidłowe dane";
