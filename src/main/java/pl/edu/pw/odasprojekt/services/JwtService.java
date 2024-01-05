@@ -12,7 +12,7 @@ public class JwtService {
     private static final int EXPIRE_TIME = 10 * 60 * 1000; // 10 minutes
     private static final String ISSUER = "nBank";
 
-    public String generateJwtForUser(String clientNumber) {
+    public String generateJwt(String clientNumber) {
         var currentDate = new Date();
         var expireDate = new Date(currentDate.getTime() + EXPIRE_TIME);
 

@@ -60,7 +60,7 @@ public class UserService {
         String givenPassword = calculatedSecret + user.getSecretSalt();
 
         if (passwordEncoder.matches(givenPassword, user.getSecretHash())) {
-            var jwtToken = jwtService.generateJwtForUser(dto.getClientNumber());
+            var jwtToken = jwtService.generateJwt(dto.getClientNumber());
 
             user.setFailedLoginAttempts(0);
             userRepository.save(user);
