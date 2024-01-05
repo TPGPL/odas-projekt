@@ -40,11 +40,11 @@ public class PaymentService {
     }
 
     public ServiceResponse<Void> createPayment(String senderNumber, PaymentDto dto) {
-        var sentAt = new Date();
-
         if (!validatePaymentData(dto)) {
             return ServiceResponse.<Void>builder().success(false).build();
         }
+
+        var sentAt = new Date();
 
         if (balanceService.getUserBalance(senderNumber) < dto.getAmount()) {
             return ServiceResponse.<Void>builder()
@@ -78,7 +78,7 @@ public class PaymentService {
     }
 
     private boolean validatePaymentData(PaymentDto dto) {
-        if (dto == null || dto.getAmount() <= 0) {
+        if (dto == null || dto.getAmount() <= 0 || dto.getAmount() > 9999999) {
             return false;
         }
 

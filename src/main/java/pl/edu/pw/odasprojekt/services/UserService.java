@@ -103,7 +103,9 @@ public class UserService {
     }
 
     private boolean shouldUnlock(UserData user) {
-        if (new Date().getTime() > user.getLockedUntil().getTime()) {
+        var currentDate = new Date();
+
+        if (currentDate.getTime() > user.getLockedUntil().getTime()) {
             user.setLocked(false);
             user.setFailedLoginAttempts(0);
             user.setLockedUntil(null);

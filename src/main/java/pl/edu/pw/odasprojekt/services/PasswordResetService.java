@@ -18,14 +18,14 @@ import static pl.edu.pw.odasprojekt.utils.ValidatorUtils.verifyResetToken;
 @Service
 public class PasswordResetService {
     private final static int VALID_TIME = 30 * 60 * 1000;
-    private final PasswordResetTokenRepository repository;
+    private final PasswordResetTokenRepository tokenRepository;
     private final UserService userService;
     private final AuthService authService;
     private final Validator validator;
 
     @Autowired
-    public PasswordResetService(PasswordResetTokenRepository repository, UserService userService, AuthService authService, Validator validator) {
-        this.repository = repository;
+    public PasswordResetService(PasswordResetTokenRepository tokenRepository, UserService userService, AuthService authService, Validator validator) {
+        this.tokenRepository = tokenRepository;
         this.userService = userService;
         this.authService = authService;
         this.validator = validator;
@@ -46,7 +46,7 @@ public class PasswordResetService {
         var validTo = new Date(createdDate.getTime() + VALID_TIME);
         var token = UUID.randomUUID();
 
-        while (repository.existsByToken(token.toString())) {
+        while (tokenRepository.existsByToken(token.toString())) {
             token = UUID.randomUUID(); // shouldn't happen but for safety
         }
 
@@ -57,22 +57,20 @@ public class PasswordResetService {
                 .token(token.toString())
                 .build();
 
-        repository.save(resetToken);
+        tokenRepository.save(resetToken);
 
         System.out.printf("Wysyłam email na adres %s z linkiem BASE_URL/auth/change-password?token=%s%n", dto.getEmail(), token);
     }
 
     public boolean verifyTokenValidity(String token) {
-        if (!verifyResetToken(token) || !repository.existsByToken(token)) {
+        if (!verifyResetToken(token) || !tokenRepository.existsByToken(token)) {
             return false;
         }
 
-        var resetToken = repository.findByToken(token).orElse(null);
+        var resetToken = tokenRepository.findByToken(token).orElse(null);
         var currentTime = new Date().getTime();
 
-        assert resetToken != null;
-
-        return resetToken.getExpireAt().getTime() > currentTime;
+        return resetToken != null && resetToken.getExpireAt().getTime() > currentTime;
     }
 
     public ServiceResponse<Void> handleChangeRequest(ChangePasswordDto dto) {
@@ -98,20 +96,20 @@ public class PasswordResetService {
     }
 
     private int getTokenBearerId(String token) {
-        var resetToken = repository.findByToken(token).orElse(null);
+        var resetToken = tokenRepository.findByToken(token).orElse(null);
 
         return resetToken != null ? resetToken.getUser().getId() : -1;
     }
 
     private void invalidateToken(String token) {
-        var resetToken = repository.findByToken(token).orElse(null);
+        var resetToken = tokenRepository.findByToken(token).orElse(null);
 
         if (resetToken == null) {
             return;
         }
 
         resetToken.setExpireAt(new Date(0));
-        repository.save(resetToken);
+        tokenRepository.save(resetToken);
     }
 
     private boolean validateForgetDto(ForgetPasswordDto dto) {

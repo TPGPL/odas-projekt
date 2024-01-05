@@ -6,27 +6,27 @@ import pl.edu.pw.odasprojekt.repositories.BalanceRepository;
 
 @Service
 public class BalanceService {
-    private final BalanceRepository repository;
+    private final BalanceRepository balanceRepository;
 
     @Autowired
-    public BalanceService(BalanceRepository repository) {
-        this.repository = repository;
+    public BalanceService(BalanceRepository balanceRepository) {
+        this.balanceRepository = balanceRepository;
     }
 
     public double getUserBalance(String clientNumber) {
-        var balance = repository.findByUserClientNumber(clientNumber).orElse(null);
+        var balance = balanceRepository.findByUserClientNumber(clientNumber).orElse(null);
 
         return balance != null ? balance.getBalance() : 0;
     }
 
     public String getUserCardNumber(String clientNumber) {
-        var balance = repository.findByUserClientNumber(clientNumber).orElse(null);
+        var balance = balanceRepository.findByUserClientNumber(clientNumber).orElse(null);
 
         return balance != null ? balance.getCardNumber() : null;
     }
 
     public void adjustUserBalance(String clientNumber, double amount) {
-        var userBalance = repository.findByUserClientNumber(clientNumber).orElse(null);
+        var userBalance = balanceRepository.findByUserClientNumber(clientNumber).orElse(null);
 
         if (userBalance == null) {
             return;
@@ -36,6 +36,6 @@ public class BalanceService {
 
         userBalance.setBalance(currentBalance + amount);
 
-        repository.save(userBalance);
+        balanceRepository.save(userBalance);
     }
 }

@@ -42,6 +42,7 @@ public class AuthService {
         return top / bottom;
     }
 
+    // TODO: Find better way to verify password strength?
     public boolean verifyPasswordStrength(String password) {
         double entropy = 0;
         var chars = new ArrayList<Character>();
