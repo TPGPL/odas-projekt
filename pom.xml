@@ -10,7 +10,7 @@
     </parent>
     <groupId>pl.edu.pw</groupId>
     <artifactId>odas-projekt</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>odas-projekt</name>
     <description>odas-projekt</description>
     <properties>
