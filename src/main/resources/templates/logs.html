@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[nBank] Dziennik zdarzeń</title>
+    <link th:href="@{/css/bootstrap.css}" type="text/css" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+    <div th:insert="~{layout/navigation-auth :: header}"></div>
+    <div class="content mt-3">
+        <h1 class="mb-2">Dziennik zdarzeń</h1>
+        <div th:if="${!logs.iterator().hasNext()}">
+            <p class="alert alert-info mb-2">Brak zdarzeń do wyświetlenia!</p>
+        </div>
+
+        <div th:if="${logs.iterator().hasNext()}">
+            <table class="table table-striped table-hover align-middle">
+                <thead>
+                <tr>
+                    <th scope="col">Data zdarzenia</th>
+                    <th scope="col">Adres IP</th>
+                    <th scope="col">Szczegóły</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="log: ${logs}">
+                    <td th:text="${log.createdAt}"></td>
+                    <td th:text="${log.address}"></td>
+                    <td th:text="${log.details}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

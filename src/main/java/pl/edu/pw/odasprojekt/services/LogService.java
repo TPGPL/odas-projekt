@@ -6,9 +6,12 @@ import org.springframework.stereotype.Service;
 import pl.edu.pw.odasprojekt.model.domain.EventType;
 import pl.edu.pw.odasprojekt.model.domain.LogEvent;
 import pl.edu.pw.odasprojekt.model.domain.UserData;
+import pl.edu.pw.odasprojekt.model.dtos.LogDto;
 import pl.edu.pw.odasprojekt.repositories.LogRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class LogService {
@@ -19,8 +22,13 @@ public class LogService {
         this.logRepository = logRepository;
     }
 
-    public Iterable<LogEvent> getClientLogs(String clientNumber) {
-        return logRepository.findAllByUserClientNumber(clientNumber);
+    public List<LogDto> getClientLogs(String clientNumber) {
+        var logs = logRepository.findAllByUserClientNumber(clientNumber);
+        var logDtos = new ArrayList<LogDto>();
+
+        logs.forEach(log -> logDtos.add(convertToDto(log)));
+
+        return logDtos;
     }
 
     public void createUserLog(HttpServletRequest request, EventType type, UserData user) {
@@ -43,6 +51,19 @@ public class LogService {
                 .build();
 
         createLog(log);
+    }
+
+    private LogDto convertToDto(LogEvent log) {
+        var dto = LogDto.builder().address(log.getAddress()).createdAt(log.getCreatedAt());
+
+        switch (log.getEvent()) {
+            case LoginFailure -> dto.details("Próba logowania zakończona niepowodzeniem.");
+            case LoginSuccess -> dto.details("Próba logowania zakończona sukcesem.");
+            case PasswordReset -> dto.details("Zmiana hasła.");
+            case ResetRequest -> dto.details("Prośba o zresetowanie hasła.");
+        }
+
+        return dto.build();
     }
 
     private void createLog(LogEvent event) {
