@@ -26,7 +26,7 @@ public class UserSeeder {
     public void seed() {
         var user = UserData.builder()
                 .clientNumber("1112223334445")
-                .secretHash(passwordEncoder.encode(938826 + "jttsmxnqvv"))
+                .secretHash(passwordEncoder.encode(991998 + "jttsmxnqvv"))
                 .secretSalt("jttsmxnqvv")
                 .build();
         user.setBalance(UserBalance.builder()
@@ -39,35 +39,35 @@ public class UserSeeder {
 
         user.setPersonalData(UserPersonalData.builder()
                 .user(user)
-                .email("jaroslaw@kaczynski.com")
-                .name("Jaroslaw")
-                .surname("Kaczynski")
+                .email("jan@nowak.com")
+                .name("Jan")
+                .surname("Nowak")
                 .PESEL("12121212121")
                 .build());
 
         user.getAuth().addAll(List.of(
-                UserAuth.builder().index(1).secret(1525439).user(user).build(),
-                UserAuth.builder().index(2).secret(2870347).user(user).build(),
-                UserAuth.builder().index(3).secret(4973480).user(user).build(),
-                UserAuth.builder().index(4).secret(7834832).user(user).build(),
-                UserAuth.builder().index(5).secret(11454384).user(user).build(),
-                UserAuth.builder().index(6).secret(15832120).user(user).build(),
-                UserAuth.builder().index(7).secret(20968106).user(user).build(),
-                UserAuth.builder().index(8).secret(26862289).user(user).build(),
-                UserAuth.builder().index(9).secret(33514687).user(user).build(),
-                UserAuth.builder().index(10).secret(40925278).user(user).build(),
-                UserAuth.builder().index(11).secret(49094100).user(user).build(),
-                UserAuth.builder().index(12).secret(58021169).user(user).build(),
-                UserAuth.builder().index(13).secret(67706399).user(user).build(),
-                UserAuth.builder().index(14).secret(78149839).user(user).build(),
-                UserAuth.builder().index(15).secret(89351489).user(user).build(),
-                UserAuth.builder().index(16).secret(101311349).user(user).build()));
+                UserAuth.builder().index(1).secret(1664253).user(user).build(),
+                UserAuth.builder().index(2).secret(2501781).user(user).build(),
+                UserAuth.builder().index(3).secret(3504482).user(user).build(),
+                UserAuth.builder().index(4).secret(4672349).user(user).build(),
+                UserAuth.builder().index(5).secret(6005362).user(user).build(),
+                UserAuth.builder().index(6).secret(7503575).user(user).build(),
+                UserAuth.builder().index(7).secret(9166926).user(user).build(),
+                UserAuth.builder().index(8).secret(10995448).user(user).build(),
+                UserAuth.builder().index(9).secret(12989149).user(user).build(),
+                UserAuth.builder().index(10).secret(15148004).user(user).build(),
+                UserAuth.builder().index(11).secret(17472035).user(user).build(),
+                UserAuth.builder().index(12).secret(19961207).user(user).build(),
+                UserAuth.builder().index(13).secret(22615570).user(user).build(),
+                UserAuth.builder().index(14).secret(25435089).user(user).build(),
+                UserAuth.builder().index(15).secret(28419838).user(user).build(),
+                UserAuth.builder().index(16).secret(31569692).user(user).build()));
 
         repository.save(user);
 
         var user2 = UserData.builder()
                 .clientNumber("1231231231231")
-                .secretHash(passwordEncoder.encode(991998 + "jttsmxnabc"))
+                .secretHash(passwordEncoder.encode(132208 + "jttsmxnabc"))
                 .secretSalt("jttsmxnabc")
                 .build();
 
@@ -88,22 +88,22 @@ public class UserSeeder {
                 .build());
 
         user2.getAuth().addAll(List.of(
-                UserAuth.builder().index(1).secret(1664264).user(user2).build(),
-                UserAuth.builder().index(2).secret(2501781).user(user2).build(),
-                UserAuth.builder().index(3).secret(3504479).user(user2).build(),
-                UserAuth.builder().index(4).secret(4672352).user(user2).build(),
-                UserAuth.builder().index(5).secret(6005381).user(user2).build(),
-                UserAuth.builder().index(6).secret(7503550).user(user2).build(),
-                UserAuth.builder().index(7).secret(9166925).user(user2).build(),
-                UserAuth.builder().index(8).secret(10995453).user(user2).build(),
-                UserAuth.builder().index(9).secret(12989152).user(user2).build(),
-                UserAuth.builder().index(10).secret(15148000).user(user2).build(),
-                UserAuth.builder().index(11).secret(17472035).user(user2).build(),
-                UserAuth.builder().index(12).secret(19961273).user(user2).build(),
-                UserAuth.builder().index(13).secret(22615629).user(user2).build(),
-                UserAuth.builder().index(14).secret(25435151).user(user2).build(),
-                UserAuth.builder().index(15).secret(28419839).user(user2).build(),
-                UserAuth.builder().index(16).secret(31569693).user(user2).build()));
+                UserAuth.builder().index(1).secret(721798).user(user2).build(),
+                UserAuth.builder().index(2).secret(2129715).user(user2).build(),
+                UserAuth.builder().index(3).secret(4355846).user(user2).build(),
+                UserAuth.builder().index(4).secret(7400240).user(user2).build(),
+                UserAuth.builder().index(5).secret(11262863).user(user2).build(),
+                UserAuth.builder().index(6).secret(15943715).user(user2).build(),
+                UserAuth.builder().index(7).secret(21442797).user(user2).build(),
+                UserAuth.builder().index(8).secret(27760086).user(user2).build(),
+                UserAuth.builder().index(9).secret(34895642).user(user2).build(),
+                UserAuth.builder().index(10).secret(42849427).user(user2).build(),
+                UserAuth.builder().index(11).secret(51621432).user(user2).build(),
+                UserAuth.builder().index(12).secret(61211679).user(user2).build(),
+                UserAuth.builder().index(13).secret(71620133).user(user2).build(),
+                UserAuth.builder().index(14).secret(82846844).user(user2).build(),
+                UserAuth.builder().index(15).secret(94891777).user(user2).build(),
+                UserAuth.builder().index(16).secret(107755023).user(user2).build()));
 
         repository.save(user2);
 
