@@ -7,11 +7,13 @@ import org.springframework.stereotype.Service;
 import pl.edu.pw.odasprojekt.model.ServiceResponse;
 import pl.edu.pw.odasprojekt.model.domain.EventType;
 import pl.edu.pw.odasprojekt.model.domain.UserData;
+import pl.edu.pw.odasprojekt.model.dtos.PasswordFragmentDto;
 import pl.edu.pw.odasprojekt.model.dtos.UserLoginDto;
 import pl.edu.pw.odasprojekt.repositories.UserRepository;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 import static pl.edu.pw.odasprojekt.utils.ValidatorUtils.*;
 
@@ -65,8 +67,8 @@ public class UserService {
                     .success(false).build();
         }
 
-        long calculatedSecret = authService.calculateLoginSecret(user.getId(), dto.getPasswordFrags());
-
+        PasswordFragmentDto[] passwordFrags = {dto.getS1(), dto.getS2(), dto.getS3()};
+        long calculatedSecret = authService.calculateLoginSecret(user.getId(), passwordFrags);
         String givenPassword = calculatedSecret + user.getSecretSalt();
 
         if (passwordEncoder.matches(givenPassword, user.getSecretHash())) {
@@ -112,13 +114,14 @@ public class UserService {
     }
 
     private boolean validateLoginDto(UserLoginDto dto) {
-        if (dto == null || dto.getPasswordFrags() == null || !verifyClientNumber(dto.getClientNumber())) {
+        if (dto == null || !verifyClientNumber(dto.getClientNumber())) {
             return false;
         }
 
         var indexes = new HashSet<Integer>();
+        var passFrags = List.of(dto.getS1(), dto.getS2(), dto.getS3());
 
-        for (var pass : dto.getPasswordFrags()) {
+        for (var pass : passFrags) {
             if (!verifyPasswordFragment(pass)) {
                 return false;
             }

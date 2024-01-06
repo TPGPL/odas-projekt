@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 @Data
@@ -16,7 +17,11 @@ public class UserLoginDto {
     private final static int MAX_PASSWORD_LENGTH = 16;
     private String clientNumber;
     @Builder.Default
-    private PasswordFragmentDto[] passwordFrags = new PasswordFragmentDto[3];
+    private PasswordFragmentDto s1 = new PasswordFragmentDto();
+    @Builder.Default
+    private PasswordFragmentDto s2 = new PasswordFragmentDto();
+    @Builder.Default
+    private PasswordFragmentDto s3 = new PasswordFragmentDto();
 
     public void selectPasswordFragments() {
         var rand = new Random();
@@ -28,8 +33,10 @@ public class UserLoginDto {
 
         int i = 0;
 
+        var passwordFrags = List.of(s1,s2,s3);
+
         for (var ind : passInd) {
-            passwordFrags[i] = PasswordFragmentDto.builder().index(ind).build();
+            passwordFrags.get(i).setIndex(ind);
             i++;
         }
     }
