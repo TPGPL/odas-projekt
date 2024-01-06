@@ -132,7 +132,7 @@ public class AuthController {
         var jwt = new Cookie("jwtToken", resp.getData());
 
         jwt.setHttpOnly(true);
-        //jwt.setSecure(true); // TODO
+        jwt.setSecure(true);
         jwt.setMaxAge(10 * 60);
         jwt.setPath("/");
 
@@ -147,7 +147,7 @@ public class AuthController {
         jwt.setPath("/");
         jwt.setHttpOnly(true);
         jwt.setMaxAge(0);
-        //jwt.setSecure(true); // TODO
+        jwt.setSecure(true);
 
         response.addCookie(jwt);
 

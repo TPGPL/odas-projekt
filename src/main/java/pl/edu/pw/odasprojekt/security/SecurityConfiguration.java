@@ -61,9 +61,9 @@ public class SecurityConfiguration {
 
     @Bean
     public CookieCsrfTokenRepository cookieCsrfTokenRepository() {
-        //var repo = new CookieCsrfTokenRepository();
-        //repo.setSecure(true); TODO
+        var repo = new CookieCsrfTokenRepository();
+        repo.setCookieCustomizer(cookie -> cookie.secure(true).httpOnly(true));
 
-        return new CookieCsrfTokenRepository();
+        return repo;
     }
 }
