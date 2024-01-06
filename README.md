@@ -12,3 +12,15 @@ If you made any changes to source code, update the JAR file through following co
 $ mvn clean
 $ mvn package
 ```
+
+## Built-in users
+
+```
+user: 1112223334445
+pass: mojetajnehaslo22
+```
+
+```
+user: 1231231231231
+pass: bezpiecznehaslo!
+```
