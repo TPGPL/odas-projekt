@@ -42,7 +42,7 @@ public class ValidatorUtils {
             return false;
         }
 
-        return Pattern.compile("[a-zA-Z0-9@!%$ ]{16}").matcher(password).find();
+        return Pattern.compile("[a-zA-Z0-9@!%$#^&*+=_ ]{16}").matcher(password).find();
     }
 
     public static boolean verifyPasswordFragment(PasswordFragmentDto pass) {
@@ -50,6 +50,6 @@ public class ValidatorUtils {
             return false;
         }
 
-        return Pattern.compile("[0-9a-zA-Z@!$% ]").matcher(String.valueOf(pass.getValue())).find();
+        return Pattern.compile("[a-zA-Z0-9@!%$#^&*+=_ ]").matcher(String.valueOf(pass.getValue())).find();
     }
 }
