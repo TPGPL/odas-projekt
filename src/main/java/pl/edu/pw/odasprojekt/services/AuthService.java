@@ -10,6 +10,7 @@ import pl.edu.pw.odasprojekt.repositories.AuthRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 @Service
 public class AuthService {
@@ -42,8 +43,17 @@ public class AuthService {
         return top / bottom;
     }
 
-    // TODO: Find better way to verify password strength?
     public boolean verifyPasswordStrength(String password) {
+        var smallLetters = Pattern.compile("[a-z]");
+        var bigLetters = Pattern.compile("[A-Z]");
+        var numbers = Pattern.compile("[0-9]");
+        var special = Pattern.compile("[@!%$#^&*+=_ ]");
+
+        if (!smallLetters.matcher(password).find() || !bigLetters.matcher(password).find()
+                || !numbers.matcher(password).find() || !special.matcher(password).find()) {
+            return false;
+        }
+
         double entropy = 0;
         var chars = new ArrayList<Character>();
 
