@@ -115,13 +115,13 @@ public class AuthController {
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public String loginCommand(@ModelAttribute UserLoginDto user, RedirectAttributes redirectAttributes, HttpServletResponse response) {
+    public String loginCommand(@ModelAttribute UserLoginDto user, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) {
         try {
             Thread.sleep(2000);
         } catch (Exception ignored) {
         }
 
-        var resp = userService.login(user);
+        var resp = userService.login(request, user);
 
         if (!resp.isSuccess()) {
             redirectAttributes.addFlashAttribute("message", "Nieprawidłowe dane logowania.");

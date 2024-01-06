@@ -1,9 +1,11 @@
 package pl.edu.pw.odasprojekt.services;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.odasprojekt.model.ServiceResponse;
+import pl.edu.pw.odasprojekt.model.domain.EventType;
 import pl.edu.pw.odasprojekt.model.domain.UserData;
 import pl.edu.pw.odasprojekt.model.dtos.UserLoginDto;
 import pl.edu.pw.odasprojekt.repositories.UserRepository;
@@ -19,13 +21,15 @@ public class UserService {
     private static final int LOCK_TIME = 24 * 60 * 60 * 1000; // 24 hours
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final LogService logService;
     private final AuthService authService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, JwtService jwtService, AuthService authService, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, JwtService jwtService, LogService logService, AuthService authService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.logService = logService;
         this.authService = authService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -46,7 +50,7 @@ public class UserService {
         return userRepository.findByPersonalDataEmail(email).orElse(null);
     }
 
-    public ServiceResponse<String> login(UserLoginDto dto) {
+    public ServiceResponse<String> login(HttpServletRequest request, UserLoginDto dto) {
         if (!validateLoginDto(dto) || !userRepository.existsByClientNumber(dto.getClientNumber())) {
             return ServiceResponse.<String>builder().success(false).build();
         }
@@ -54,6 +58,8 @@ public class UserService {
         var user = getUserByClientNumber(dto.getClientNumber());
 
         if (user.isLocked() && !shouldUnlock(user)) {
+            logService.createUserLog(request, EventType.LoginFailure, user);
+
             return ServiceResponse.<String>builder()
                     .message("Twoje konto zostało zablokowane. Spróbuj ponownie później.")
                     .success(false).build();
@@ -68,6 +74,7 @@ public class UserService {
 
             user.setFailedLoginAttempts(0);
             userRepository.save(user);
+            logService.createUserLog(request, EventType.LoginSuccess, user);
 
             return ServiceResponse.<String>builder().success(true).data(jwtToken).build();
         }
@@ -76,6 +83,7 @@ public class UserService {
 
         if (failedAttempts == MAX_FAILED_ATTEMPTS) {
             lockAccount(user);
+            logService.createUserLog(request, EventType.LoginFailure, user);
 
             return ServiceResponse.<String>builder()
                     .message("Twoje konto zostało zablokowane. Spróbuj ponownie później.")
@@ -84,6 +92,7 @@ public class UserService {
 
         user.setFailedLoginAttempts(failedAttempts + 1);
         userRepository.save(user);
+        logService.createUserLog(request, EventType.LoginFailure, user);
 
         return ServiceResponse.<String>builder().success(false).build();
     }
